@@ -118,12 +118,16 @@ class CatalogTests(TestCase):
     def test_non_numeric_category(self):
         # category filter with non-numeric value should return all products, not error
         names = self.names(self.client.get(self.url, {"category": "abc"}))
-        self.assertEqual(names, {self.p1.name, self.p2.name, self.p3.name, self.p4.name})
+        self.assertEqual(
+            names, {self.p1.name, self.p2.name, self.p3.name, self.p4.name}
+        )
 
     def test_non_numeric_tags(self):
         # tags filter with non-numeric value should return all products, not error
         names = self.names(self.client.get(self.url, {"tags": "abc"}))
-        self.assertEqual(names, {self.p1.name, self.p2.name, self.p3.name, self.p4.name})
+        self.assertEqual(
+            names, {self.p1.name, self.p2.name, self.p3.name, self.p4.name}
+        )
 
     def test_invalid_pk(self):
         # product detail with an invalid pk should return error

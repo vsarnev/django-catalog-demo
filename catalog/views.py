@@ -36,7 +36,7 @@ def product_list(request):
         products = products.filter(stock__gt=0)
 
     # Filter for category and build tag list for the selected category.
-    if selected_category.isdigit(): # Ignore non-numeric inputs for categories
+    if selected_category.isdigit():  # Ignore non-numeric inputs for categories
         products = products.filter(category_id=selected_category)
 
         # Filter tags to hide irrelevant ones
