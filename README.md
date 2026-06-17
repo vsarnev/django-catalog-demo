@@ -19,7 +19,7 @@ substrings across each product's various attributes.
 ```
 pip install -r requirements.txt
 ```
-### 2. Create your own admin login (the committed DB has data but no shared password)
+### 2. Create your own admin login
 ```
 python manage.py createsuperuser
 ```
