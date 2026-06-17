@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if product %}{{ product.name }}{% else %}Item not found{% endif %} - Product Catalog</title>
+</head>
+<body>
+    {% if product %}
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+        <ul>
+            <li>SKU: {{ product.sku }}</li>
+            <li>Manufacturer: {{ product.manufacturer }}</li>
+            <li>Category: {{ product.category.name }}</li>
+            <li>Stock: {% if product.is_in_stock %}{{ product.stock }} in stock{% else %}Out of stock{% endif %}</li>
+            <li>Tags: {% for tag in product.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</li>
+        </ul>
+    {% else %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <button onclick="window.location.href='{% url 'catalog:product_list' %}'">Back to catalog</button>
+</body>
+</html>

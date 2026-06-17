@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+    <style>
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);  /* 3 equal columns, always */
+            gap: 12px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            min-height: 90px;        /* equal height regardless of content */
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Catalog</h1>
+
+    <form method="get" action="{% url 'catalog:product_list' %}">
+        <input type="text" name="q" placeholder="Search products..." value="{{ q }}">
+
+        <select name="category" onchange="this.form.submit()">
+            <option value="">All categories</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}"
+                {% if category.id|stringformat:"s" == selected_category %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br>
+        
+        <label>
+            <input type="checkbox" name="in_stock" value="1" {% if in_stock_only %}checked{% endif %}>
+            In stock only
+        </label>
+
+        {% regroup tags by group as tag_groups %}
+        {% for group in tag_groups %}
+            <fieldset>
+            <legend>{{ group.grouper }}</legend>
+            {% for tag in group.list %}
+                <label>
+                <input type="checkbox" name="tags" value="{{ tag.id }}"
+                    {% if tag.id|stringformat:"s" in selected_tag_ids %}checked{% endif %}>
+                {{ tag.name }}
+                </label>
+            {% endfor %}
+            </fieldset>
+        {% endfor %}
+
+        <button type="submit">Apply Filters</button>
+        <button type="button" onclick="window.location.href='{% url 'catalog:product_list' %}'">Clear all</button>
+    </form>
+
+    <p>{{ products.count }} items found.</p>
+    <ul class="product-list">
+        {% for product in products %}
+            <li class="product-item">
+                <a href="{% url 'catalog:product_detail' product.pk %}">{{ product.name }}</a>
+                <div>SKU {{ product.sku }}</div>
+                {% if not product.is_in_stock %}<div>Out of stock</div>{% endif %}
+            </li>
+        {% empty %}
+            <li>No products match your search.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
