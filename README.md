@@ -86,6 +86,22 @@ Selected tags are grouped by their group, and one filter is applied per group. T
 AND across groups, and OR within a group. (e.g. Copper **and** (12 AWG **or** 14 AWG wire))
 A final distinct call removes possible duplicates introduced by the many-to-many joins.
 
+## Assumptions & notes
+
+- **Development configuration:** `DEBUG = True` and the default `SECRET_KEY` are committed
+  for ease of evaluation. In a real deployment these would change: `DEBUG = False`, the
+  `SECRET_KEY` loaded from an environment variable (never committed), and a restricted
+  `ALLOWED_HOSTS`.
+- **The SQLite database is committed intentionally:** so the catalog and admin work
+  immediately on clone.
+- **A product belongs to exactly one category:** (a `ForeignKey`), while tags are
+  many-to-many. A product can have many tags, and the same tag can apply to many products.
+- **Multi-tag filtering is faceted:** tags in the same group are OR-ed and different groups
+  are AND-ed together (e.g. "Copper and (12 AWG or 14 AWG)").
+- **"At least one tag" is enforced at the form/admin layer:** (`blank=False`), not as a
+  database constraint.
+- **Sample data is fabricated:** SKUs and manufacturers are illustrative, not real.
+
 ## AI usage disclosure
 
 AI Tooling (Claude Code/Github Copilot) was used for assistance during development. 
